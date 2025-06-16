@@ -14,3 +14,20 @@ jobs:
         with:
           name: archivo-test
           path: test.log
+
+  segundo_job:
+    runs-on: ubuntu-latest
+    needs: first_job
+    steps:
+      - name: Descargar artefacto
+        uses: actions/download-artifact@v4
+        with:
+          name: archivo-test
+      - name: Leer archivo
+        id: step_1
+        run: |
+          echo "El contenido del archivo es:"
+          cat test.log
+          echo "::set-output name=my_variable::$(cat test.log)"
+      - name: Imprimir variable de salida
+        run: echo "La variable de salida es ${{ steps.step_1.outputs.my_variable }}"
