@@ -5,7 +5,7 @@ jobs:
   first_job:
     runs-on: ubuntu-latest
     outputs:
-      salida: hola
+      salida: ${{ steps.step_1.outputs.my_variable }}
     steps:
       - name: Working dir
         id: step_1
@@ -16,6 +16,10 @@ jobs:
   second_job:
     runs-on: ubuntu-latest
     needs: first_job
+
+    env:
+      SALIDA: ${{ needs.first_job.outputs.salida }}
+
     steps:
       - name: Hola Mundo
-        run: 'echo "Hola Mundo: ${{ github.ref }}"'
+        run: 'echo "Hola Mundo: ${{ github.ref }} y msje salida: ${{ env.SALIDA }}"'
